@@ -26,6 +26,11 @@ target_link_libraries(pangolin_viewer
                       opencv_highgui
                       pangolin)
 
+if (MSVC)
+    target_compile_options(pangolin_viewer PRIVATE /MP)
+    set_target_properties(pangolin_viewer PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 1)
+endif()
+
 # ----- Install configuration -----
 
 set(INSTALL_PANGOLIN_VIEWER OFF CACHE BOOL "Install PangolinViewer library")

@@ -107,4 +107,10 @@ foreach(EXECUTABLE_TARGET IN LISTS EXECUTABLE_TARGETS)
                                PRIVATE
                                $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/3rd/popl/include>
                                $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/3rd/spdlog/include>)
+    if (MSVC)
+        # include dirent windows
+        target_include_directories(${EXECUTABLE_TARGET}
+                                   PRIVATE
+                                   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/3rd/dirent/>)
+    endif()
 endforeach()

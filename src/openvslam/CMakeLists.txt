@@ -59,14 +59,23 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 # ----- Compile configuration -----
 
+target_compile_options(${PROJECT_NAME} PRIVATE $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra -Og -O3 -ffast-math>)
+if(BUILD_WITH_MARCH_NATIVE)
+    target_compile_options(${PROJECT_NAME} PRIVATE $<$<CXX_COMPILER_ID:GNU>: -mtune=native -march=native>)
+    message(STATUS "Architecture-aware optimization (-march=native): ENABLED")
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE $<$<CXX_COMPILER_ID:GNU>: -mtune=native>)
+    message(STATUS "Architecture-aware optimization (-march=native): DISABLED")
+endif()
+
 # OpenMP
 set(USE_OPENMP OFF CACHE BOOL "Use OpenMP")
 if(USE_OPENMP)
     find_package(OpenMP)
     if(OpenMP_FOUND)
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
         target_compile_definitions(${PROJECT_NAME} PUBLIC USE_OPENMP)
+        #for cmake version > 3.9 OpenMP target exists
+        target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
         message(STATUS "OpenMP: ENABLED")
     else()
         message(STATUS "OpenMP: DISABLED")
@@ -77,8 +86,7 @@ endif()
 
 set(USE_SSE_ORB OFF CACHE BOOL "Enable SSE3 instruction for ORB extraction (-msse3)")
 if(USE_SSE_ORB)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse3")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse3")
+    target_compile_options(${PROJECT_NAME} PRIVATE $<$<CXX_COMPILER_ID:GNU>:-msse3>)
     target_compile_definitions(${PROJECT_NAME} PUBLIC USE_SSE_ORB)
     message(STATUS "SSE3 for ORB extraction (-msse3): ENABLED")
 else()
@@ -87,20 +95,21 @@ endif()
 
 set(USE_SSE_FP_MATH OFF CACHE BOOL "Enable SSE instruction for floating-point operation (-mfpmath=sse)")
 if(USE_SSE_FP_MATH)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpmath=sse")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpmath=sse")
+    target_compile_options(${PROJECT_NAME} PRIVATE $<$<CXX_COMPILER_ID:GNU>:-mfpmath=sse>)
     message(STATUS "SSE for floating-point operation (-mfpmath=sse): ENABLED")
 else()
     message(STATUS "SSE for floating-point operation (-mfpmath=sse): DISABLED")
 endif()
 
 # Check BoW Framework
-set(BOW_FRAMEWORK "DBoW2" CACHE STRING "DBoW2 or FBoW")
-set_property(CACHE BOW_FRAMEWORK PROPERTY STRINGS "DBoW2" "FBoW")
 if(BOW_FRAMEWORK MATCHES "DBoW2")
     find_package(DBoW2 REQUIRED)
-    set(BoW_INCLUDE_DIR ${DBoW2_INCLUDE_DIRS})
-    set(BoW_LIBRARY ${DBoW2_LIBS})
+    if (TARGET DBoW2::DBoW2)
+        set(BoW_LIBRARY "DBoW2::DBoW2")
+    else()
+        set(BoW_INCLUDE_DIR ${DBoW2_INCLUDE_DIRS})
+        set(BoW_LIBRARY ${DBoW2_LIBS})
+    endif()
     target_compile_definitions(${PROJECT_NAME} PUBLIC USE_DBOW2)
 elseif(BOW_FRAMEWORK MATCHES "FBoW")
     find_package(fbow REQUIRED)
@@ -147,7 +156,11 @@ target_link_libraries(${PROJECT_NAME}
                       ${BoW_LIBRARY}
                       PRIVATE
                       ${LAPACK_LIBRARIES})
-
+if (MSVC)
+    #target_compile_options(${PROJECT_NAME} PRIVATE /MP)
+    set_target_properties(${PROJECT_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 1)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE _USE_MATH_DEFINES)
+endif()
 # ----- Install configuration -----
 
 set(OPENVSLAM_INCLUDE_INSTALL_DIR ${INCLUDES_DESTINATION}/openvslam)
