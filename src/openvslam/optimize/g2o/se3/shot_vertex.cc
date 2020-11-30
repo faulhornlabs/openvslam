@@ -1,5 +1,9 @@
 #include "openvslam/optimize/g2o/se3/shot_vertex.h"
 
+#if _MSC_VER && G2O_SHARED_LIBS
+extern template class __declspec(dllimport) g2o::BaseVertex<6, g2o::SE3Quat>;
+#endif
+
 namespace openvslam {
 namespace optimize {
 namespace g2o {

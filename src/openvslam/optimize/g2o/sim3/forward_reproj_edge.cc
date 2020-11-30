@@ -1,5 +1,10 @@
 #include "openvslam/optimize/g2o/sim3/forward_reproj_edge.h"
 
+#if _MSC_VER && G2O_SHARED_LIBS
+extern template class __declspec(dllimport) g2o::BaseEdge<2, g2o::Vector2>;
+extern template class __declspec(dllimport) g2o::BaseVertex<7, g2o::Sim3>;
+#endif
+
 namespace openvslam {
 namespace optimize {
 namespace g2o {

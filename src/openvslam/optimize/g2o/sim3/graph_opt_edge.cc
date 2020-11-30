@@ -1,5 +1,10 @@
 #include "openvslam/optimize/g2o/sim3/graph_opt_edge.h"
 
+#if _MSC_VER && G2O_SHARED_LIBS
+extern template class __declspec(dllimport) g2o::BaseEdge<7, g2o::Sim3>;
+extern template class __declspec(dllimport) g2o::BaseVertex<7, g2o::Sim3>;
+#endif
+
 namespace openvslam {
 namespace optimize {
 namespace g2o {

@@ -1,5 +1,12 @@
 #include "openvslam/optimize/g2o/se3/equirectangular_reproj_edge.h"
 
+#if _MSC_VER && G2O_SHARED_LIBS
+extern template class __declspec(dllimport) g2o::BaseEdge<2, g2o::Vector2>;
+extern template class __declspec(dllimport) g2o::BaseEdge<3, g2o::Vector3>;
+extern template class __declspec(dllimport) g2o::BaseVertex<3, g2o::Vector3>;
+extern template class __declspec(dllimport) g2o::BaseVertex<6, g2o::SE3Quat>;
+#endif
+
 namespace openvslam {
 namespace optimize {
 namespace g2o {
