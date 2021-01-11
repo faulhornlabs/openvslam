@@ -80,6 +80,8 @@ if(NOT OpenCV_FOUND)
 endif()
 message(STATUS "Use OpenCV ${OpenCV_VERSION}")
 
+find_package(suitesparse CONFIG QUIET)
+
 # ----- Install configuration -----
 
 include(CMakePackageConfigHelpers)
@@ -97,6 +99,10 @@ set(OPENVSLAM_VERSION 0.0.1)
 write_basic_package_version_file(${OPENVSLAM_VERSION_CONFIG}
                                  VERSION ${OPENVSLAM_VERSION}
                                  COMPATIBILITY SameMajorVersion)
+if(NOT suitesparse_FOUND)
+    set(suitesparse_FOUND 0)
+endif()
+
 # Create a project config file
 configure_file(${PROJECT_SOURCE_DIR}/cmake/Config.cmake.in ${OPENVSLAM_PROJECT_CONFIG} @ONLY)
 
