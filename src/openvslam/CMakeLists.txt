@@ -30,7 +30,7 @@ else()
         include_directories(${CXSPARSE_INCLUDE_DIRS})
     endif()
     # SuiteSparse for g2o
-    find_package(suitesparse CONFIG)
+    #find_package(suitesparse ${FIND_TYPE_SUITSPARSE})
     if(suitesparse_FOUND)
         include_directories(${SUITESPARSE_INCLUDE_DIRS})
     endif()

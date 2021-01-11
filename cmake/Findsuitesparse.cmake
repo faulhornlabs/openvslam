@@ -308,6 +308,7 @@ mark_as_advanced(CCOLAMD_INCLUDE_DIR)
 #
 # If SuiteSparse version is >= 4 then SuiteSparse_config is required.
 # For SuiteSparse 3, UFconfig.h is required.
+set(SUITESPARSE_CONFIG_LIBRARY)
 find_library(SUITESPARSE_CONFIG_LIBRARY NAMES suitesparseconfig
         PATHS ${SUITESPARSE_CHECK_LIBRARY_DIRS})
 if (EXISTS ${SUITESPARSE_CONFIG_LIBRARY})
@@ -539,8 +540,9 @@ suitesparse_reset_find_library_prefix()
 # Handle REQUIRED and QUIET arguments to FIND_PACKAGE
 include(FindPackageHandleStandardArgs)
 if (SUITESPARSE_FOUND)
+    set(suitesparse_FOUND ${SUITESPARSE_FOUND})
     find_package_handle_standard_args(SuiteSparse
-            REQUIRED_VARS ${SUITESPARSE_FOUND_REQUIRED_VARS}
+            REQUIRED_VARS ${SUITESPARSE_FOUND_REQUIRED_VARS} suitesparse_FOUND
             VERSION_VAR SUITESPARSE_VERSION
             FAIL_MESSAGE "Failed to find some/all required components of SuiteSparse.")
 else (SUITESPARSE_FOUND)

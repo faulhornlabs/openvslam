@@ -80,8 +80,11 @@ if(NOT OpenCV_FOUND)
 endif()
 message(STATUS "Use OpenCV ${OpenCV_VERSION}")
 
-find_package(suitesparse CONFIG QUIET)
+if (MSVC)
+    set(FIND_TYPE_SUITSPARSE CONFIG)
+endif()
 
+find_package(suitesparse ${FIND_TYPE_SUITSPARSE} QUIET)
 # ----- Install configuration -----
 
 include(CMakePackageConfigHelpers)
