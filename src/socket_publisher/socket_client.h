@@ -2,8 +2,11 @@
 #define SOCKET_PUBLISHER_SOCKET_CLIENT_H
 
 #include "openvslam/config.h"
-
+#ifndef _MSC_VER
 #include <sioclient/sio_client.h>
+#else
+#include <sio_client.h>
+#endif
 
 namespace openvslam {
 class config;

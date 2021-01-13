@@ -10,7 +10,9 @@ if(@USE_PANGOLIN_VIEWER@)
     find_dependency(Pangolin)
 endif()
 
-if(@USE_SOCKET_PUBLISHER@)
+set(HAS_SIOC_TARGET @sioclient_FOUND@)
+
+if(@USE_SOCKET_PUBLISHER@ AND HAS_SIOC_TARGET)
     find_dependency(sioclient)
     find_dependency(Protobuf)
 endif()

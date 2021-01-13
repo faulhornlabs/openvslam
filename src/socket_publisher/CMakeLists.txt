@@ -1,12 +1,24 @@
 # ----- Find dependencies -----
 
 # socket.io-cpp-client
-find_package(sioclient REQUIRED)
+if (MSVC)
+    find_package(sioclient QUIET)
+else()
+    find_package(sioclient REQUIRED)
+endif()
 set(sioclinet_library ${SIOCLIENT_LIBRARY})
 set(sioclient_includes ${SIOCLIENT_INCLUDE_DIR})
 if (TARGET sioclient)
     set(sioclinet_library sioclient)
     set(sioclient_includes )
+elseif(MSVC)
+    find_package(Boost COMPONENTS random REQUIRED)
+    find_library(SIOCLIENT_LIBRARY_RELEASE sioclient PATH_SUFFIXES lib)
+    find_library(SIOCLIENT_LIBRARY_DEBUG sioclient PATH_SUFFIXES debug/lib)
+    string(REPLACE "debug/" "" SIOCLIENT_LIBRARY_RELEASE ${SIOCLIENT_LIBRARY_RELEASE})
+    find_path(SIOCLIENT_INCLUDE sio_client.h)
+    set(sioclinet_library debug ${SIOCLIENT_LIBRARY_DEBUG} optimized ${SIOCLIENT_LIBRARY_RELEASE} Boost::random)
+    set(sioclient_includes ${SIOCLIENT_INCLUDE})
 endif()
 
 
@@ -20,8 +32,10 @@ message(STATUS "Found protoc executable: ${PROTOBUF_PROTOC_EXECUTABLE}")
 # ----- Protobuf transpile -----
 
 protobuf_generate_cpp(MAP_PB_SOURCE MAP_PB_HEADER protobuf/map_segment.proto)
+if (NOT MSVC)
 set_source_files_properties(${MAP_PB_HEADER} ${MAP_PB_SOURCE}
                             COMPILE_FLAGS -Wno-unused-variable)
+endif()
 
 # ----- Configure SocketPublisher library -----
 
@@ -34,9 +48,10 @@ add_library(socket_publisher
             publisher.cc
             socket_client.cc
             ${MAP_PB_SOURCE})
-
+if (NOT MSVC)
 set_source_files_properties(${MAP_PB_SOURCE} PROPERTIES
                             COMPILE_FLAGS -Wno-unused-parameter)
+endif()
 
 set_target_properties(socket_publisher PROPERTIES
                       OUTPUT_NAME socket_publisher
