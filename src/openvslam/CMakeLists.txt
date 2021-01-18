@@ -53,9 +53,9 @@ add_library(${PROJECT_NAME}
             ${CMAKE_CURRENT_SOURCE_DIR}/global_optimization_module.cc)
 
 # Set output directory of the library
-set_target_properties(${PROJECT_NAME} PROPERTIES
-                      OUTPUT_NAME openvslam
-                      LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+#set_target_properties(${PROJECT_NAME} PROPERTIES
+#                      OUTPUT_NAME openvslam
+#                      LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
 # ----- Compile configuration -----
 

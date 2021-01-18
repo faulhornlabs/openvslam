@@ -12,9 +12,9 @@ add_library(pangolin_viewer
             viewer.cc
             color_scheme.cc)
 
-set_target_properties(pangolin_viewer PROPERTIES
-                      OUTPUT_NAME pangolin_viewer
-                      LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+#set_target_properties(pangolin_viewer PROPERTIES
+#                      OUTPUT_NAME pangolin_viewer
+#                      LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
 target_include_directories(pangolin_viewer 
                            PUBLIC
@@ -33,8 +33,8 @@ endif()
 
 # ----- Install configuration -----
 
-set(INSTALL_PANGOLIN_VIEWER OFF CACHE BOOL "Install PangolinViewer library")
-if(INSTALL_PANGOLIN_VIEWER)
+#set(INSTALL_PANGOLIN_VIEWER OFF CACHE BOOL "Install PangolinViewer library")
+#if(INSTALL_PANGOLIN_VIEWER)
     set(PANGOLIN_VIEWER_INCLUDE_INSTALL_DIR ${INCLUDES_DESTINATION}/pangolin_viewer)
 
     install(TARGETS pangolin_viewer
@@ -47,4 +47,4 @@ if(INSTALL_PANGOLIN_VIEWER)
     file(GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
     install(FILES ${HEADERS}
             DESTINATION ${PANGOLIN_VIEWER_INCLUDE_INSTALL_DIR})
-endif()
+#endif()

@@ -53,9 +53,9 @@ set_source_files_properties(${MAP_PB_SOURCE} PROPERTIES
                             COMPILE_FLAGS -Wno-unused-parameter)
 endif()
 
-set_target_properties(socket_publisher PROPERTIES
-                      OUTPUT_NAME socket_publisher
-                      LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+#set_target_properties(socket_publisher PROPERTIES
+#                      OUTPUT_NAME socket_publisher
+#                      LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
 target_include_directories(socket_publisher
                            PUBLIC
@@ -70,11 +70,14 @@ target_link_libraries(socket_publisher
                       opencv_imgcodecs
                       ${sioclinet_library}
                       ${PROTOBUF_LIBRARIES})
-
+if (MSVC)
+    target_compile_options(socket_publisher PRIVATE /MP)
+    set_target_properties(socket_publisher PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 1)
+endif()
 # ----- Install configuration -----
 
-set(INSTALL_SOCKET_PUBLISHER OFF CACHE BOOL "Install SocketPublisher library")
-if(INSTALL_SOCKET_PUBLISHER)
+#set(INSTALL_SOCKET_PUBLISHER OFF CACHE BOOL "Install SocketPublisher library")
+#if(INSTALL_SOCKET_PUBLISHER)
     set(SOCKER_PUBLISHER_INCLUDE_INSTALL_DIR ${INCLUDES_DESTINATION}/socket_publisher)
 
     install(TARGETS socket_publisher
@@ -87,4 +90,4 @@ if(INSTALL_SOCKET_PUBLISHER)
     file(GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
     install(FILES ${HEADERS}
             DESTINATION ${SOCKER_PUBLISHER_INCLUDE_INSTALL_DIR})
-endif()
+#endif()
