@@ -61,10 +61,10 @@ set(BUILD_WITH_MARCH_NATIVE OFF CACHE BOOL "Enable architecture-aware optimizati
 find_package(Threads REQUIRED)
 
 # Eigen
-find_package(Eigen3 3.3 REQUIRED)
+find_package(Eigen3 3.3 REQUIRED CONFIG)
 
 # yaml-cpp
-find_package(yaml-cpp REQUIRED)
+find_package(yaml-cpp REQUIRED CONFIG)
 
 # OpenCV
 find_package(OpenCV 3.2.0 QUIET

@@ -64,7 +64,7 @@ if(BUILD_WITH_MARCH_NATIVE)
     target_compile_options(${PROJECT_NAME} PRIVATE $<$<CXX_COMPILER_ID:GNU>: -mtune=native -march=native>)
     message(STATUS "Architecture-aware optimization (-march=native): ENABLED")
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE $<$<CXX_COMPILER_ID:GNU>: -mtune=native>)
+    #target_compile_options(${PROJECT_NAME} PRIVATE $<$<CXX_COMPILER_ID:GNU>: -mtune=native>)
     message(STATUS "Architecture-aware optimization (-march=native): DISABLED")
 endif()
 

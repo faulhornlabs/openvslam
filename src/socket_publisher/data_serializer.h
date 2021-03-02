@@ -6,11 +6,11 @@
 #include <memory>
 
 #include <Eigen/Core>
-#ifndef _MSC_VER
-#include <sioclient/sio_client.h>
-#else
+//#ifndef _MSC_VER
+//#include <sioclient/sio_client.h>
+//#else
 #include <sio_client.h>
-#endif
+//#endif
 #include <opencv2/core.hpp>
 
 namespace openvslam {
